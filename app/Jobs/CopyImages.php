@@ -29,9 +29,6 @@ class CopyImages implements ShouldQueue
      */
     public function __construct($currentPage = 1)
     {
-        logger('current page');
-        logger($currentPage);
-
         $this->source = new Client(
             config('woocommerce.source.site_url'),
             config('woocommerce.source.key'),

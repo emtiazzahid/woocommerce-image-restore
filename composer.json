@@ -13,7 +13,8 @@
         "laravel/framework": "^8.40",
         "laravel/horizon": "^5.7",
         "laravel/tinker": "^2.5",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "romanzipp/laravel-queue-monitor": "^2.1"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

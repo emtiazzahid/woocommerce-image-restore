@@ -19,5 +19,11 @@ Route::get('/', function () {
 
 Route::get('/tadattada', function () {
     \Illuminate\Support\Facades\Artisan::call("copy-images");
+    dd('copy image command executed');
 });
+
+Route::prefix('jobs')->group(function () {
+    Route::queueMonitor();
+});
+
 

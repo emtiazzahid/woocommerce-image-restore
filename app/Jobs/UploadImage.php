@@ -10,10 +10,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class UploadImage implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
     /**
      * @var
@@ -92,29 +93,20 @@ class UploadImage implements ShouldQueue
          * Ref: oasisworkflow.com/how-to-authenticate-wp-rest-apis-with-postman
          */
         $client = new \GuzzleHttp\Client([
-            'base_uri' => config('woocommerce.destination.site_url') . "wp-json/wp/v2/",
+            'base_uri' => config('woocommerce.destination.site_url') . "wp-json/mu_helper/v1/",
             'timeout'  => config('woocommerce.destination.timeout'),
-            'headers' => [
-                'Content-Type' => 'image/jpg',
-                'Content-Disposition' => 'attachment;filename="' . $file->name . '"',
-                "Accept" => "application/json",
-                'X-WP-Nonce' => config('woocommerce.destination.nonce'),
-                'Cookie' => config('woocommerce.destination.cookie')
-            ],
-            'verify' => false
+            "Accept" => "application/json",
+            "Content-Type" => "application/json",
         ]);
 
-        $data = $client->post( "media", [
-            'multipart' => [
-                ['name' => 'date', 'contents' => $file->date_created],
-                ['name' => 'date_gmt', 'contents' => $file->date_created_gmt],
-                ['name' => 'title', 'contents' => $file->name],
-                ['name' => 'alt_text', 'contents' => $file->alt],
-                ['name' => 'file', 'contents' => file_get_contents($file->src), 'filename' => $file->name]
-            ],
+        $data = $client->post('media', [
+            'form_params' => [
+                'file' => $file
+            ]
         ]);
 
         $result = json_decode($data->getBody() ,true);
+
         $imageId = Arr::get($result, 'id');
 
         UploadRecord::create([

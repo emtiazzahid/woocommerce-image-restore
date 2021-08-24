@@ -171,7 +171,7 @@ return [
             'balance' => 'auto',
             'maxProcesses' => 1,
             'memory' => 128,
-            'tries' => 1,
+            'tries' => 3,
             'nice' => 0,
         ],
     ],

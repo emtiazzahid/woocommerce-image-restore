@@ -14,8 +14,9 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class UploadImage implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $timeout = 300;
     /**
      * @var
      */

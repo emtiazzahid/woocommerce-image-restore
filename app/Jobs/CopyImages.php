@@ -12,14 +12,15 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class CopyImages implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $timeout = 600;
     /**
      * @var Client
      */
     private $source;
 
-    private $perPage = 100;
+    private $perPage = 10;
 
     private $currentPage;
     /**
@@ -64,7 +65,7 @@ class CopyImages implements ShouldQueue
 
         if ($count > 0) {
             $this->currentPage++;
-            CopyImages::dispatch($this->currentPage);
+            CopyImages::dispatch($this->currentPage)->delay(now()->addSeconds(10));;
         }
     }
 }
